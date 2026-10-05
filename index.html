@@ -48,13 +48,30 @@
             const amount = Number(expenseForm.elements.amount.value);
             const category = expenseForm.elements.category.value;
             const expenseItem = document.createElement("li");
+            const expenseDescription = document.createElement("span");
+            const deleteButton = document.createElement("button");
             const emptyState = document.getElementById("empty-state");
 
             if (emptyState) {
                 emptyState.remove();
             }
 
-            expenseItem.textContent = `${category}: ${amount.toFixed(2)}`;
+            expenseDescription.textContent = `${category}: ${amount.toFixed(2)} `;
+            deleteButton.type = "button";
+            deleteButton.textContent = "Delete";
+            deleteButton.setAttribute("aria-label", `Delete ${category} expense of ${amount.toFixed(2)}`);
+            deleteButton.addEventListener("click", () => {
+                expenseItem.remove();
+
+                if (expenseList.children.length === 0) {
+                    const emptyMessage = document.createElement("li");
+                    emptyMessage.id = "empty-state";
+                    emptyMessage.textContent = "No expenses added yet.";
+                    expenseList.appendChild(emptyMessage);
+                }
+            });
+
+            expenseItem.append(expenseDescription, deleteButton);
             expenseList.appendChild(expenseItem);
             expenseForm.reset();
             expenseForm.elements.amount.focus();
