@@ -11,24 +11,55 @@
 
     <h2>Add Expense</h2>
 
-    <label>Expense Amount:</label>
-    <input type="number" placeholder="Enter amount">
+    <form id="expense-form">
+        <label for="expense-amount">Expense Amount:</label>
+        <input id="expense-amount" name="amount" type="number" min="0.01" step="0.01" placeholder="Enter amount" required>
 
-    <br><br>
+        <br><br>
 
-    <label>Category:</label>
-    <select>
-        <option>Food</option>
-        <option>Transport</option>
-        <option>Education</option>
-        <option>Medical</option>
-        <option>Shopping</option>
-        <option>Other</option>
-    </select>
+        <label for="expense-category">Category:</label>
+        <select id="expense-category" name="category" required>
+            <option value="" disabled selected>Choose a category</option>
+            <option>Food</option>
+            <option>Transport</option>
+            <option>Education</option>
+            <option>Medical</option>
+            <option>Shopping</option>
+            <option>Other</option>
+        </select>
 
-    <br><br>
+        <br><br>
 
-    <button>Add Expense</button>
+        <button type="submit">Add Expense</button>
+    </form>
+
+    <h2>Expenses</h2>
+    <ul id="expense-list" aria-live="polite">
+        <li id="empty-state">No expenses added yet.</li>
+    </ul>
+
+    <script>
+        const expenseForm = document.getElementById("expense-form");
+        const expenseList = document.getElementById("expense-list");
+
+        expenseForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const amount = Number(expenseForm.elements.amount.value);
+            const category = expenseForm.elements.category.value;
+            const expenseItem = document.createElement("li");
+            const emptyState = document.getElementById("empty-state");
+
+            if (emptyState) {
+                emptyState.remove();
+            }
+
+            expenseItem.textContent = `${category}: ${amount.toFixed(2)}`;
+            expenseList.appendChild(expenseItem);
+            expenseForm.reset();
+            expenseForm.elements.amount.focus();
+        });
+    </script>
 
 </body>
 </html>
